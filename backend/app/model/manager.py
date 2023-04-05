@@ -14,7 +14,7 @@ class Manager(SQLModel, TimeMixin, table=True):
         nullable=False,
         foreign_key="users.id"
     )
-    user: Optional["Users"] = Relationship(back_populates="users")
+    user: Optional["Users"] = Relationship(back_populates="manager")
     first_name: str
     second_name: str
     patronym: str

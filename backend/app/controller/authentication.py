@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.schema import ResponseSchema, RegisterSchema, LoginSchema, ForgotPasswordSchema
+from app.schema import ResponseSchema, RegisterSchema, RegisterManagerSchema, LoginSchema, ForgotPasswordSchema
 from app.service.auth_service import AuthService
 
 
@@ -8,7 +8,13 @@ router = APIRouter(prefix="/auth", tags=['Authentication'])
 
 @router.post("/register", response_model=ResponseSchema, response_model_exclude_none=True)
 async def register(request_body: RegisterSchema):
-    await AuthService.register_service(request_body)
+    await AuthService.register_client_service(request_body)
+    return ResponseSchema(detail="Succesfully save data!")
+
+
+@router.post("/register_manager", response_model=ResponseSchema, response_model_exclude_none=True)
+async def register(request_body: RegisterManagerSchema):
+    await AuthService.register_manager_service(request_body)
     return ResponseSchema(detail="Succesfully save data!")
 
 

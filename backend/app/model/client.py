@@ -14,7 +14,7 @@ class Client(SQLModel, TimeMixin, table=True):
         nullable=False,
         foreign_key="users.id"
     )
-    user: Optional["Users"] = Relationship(back_populates="users")
+    user: Optional["Users"] = Relationship(back_populates="client")
     name: str
     address: str
     postal_address: str
