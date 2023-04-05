@@ -3,12 +3,16 @@ from sqlalchemy.orm import sessionmaker
 from sqlmodel import SQLModel
 
 
-DB_CONFIG = f"postgresql+asyncpg://buyhardware:AI$Yay2#ns_@localhost:5433/buyhardware"
+DB_CONFIG = f"postgresql+asyncpg://buyhardware:AI$Yay21ns_@localhost:5433/buyhardware"
+
+SECRET_KEY = "8uYhaArdVVAr3"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
 
 class AsyncDatabaseSession:
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.session = None
         self.engine = None
 
@@ -30,7 +34,7 @@ db = AsyncDatabaseSession()
 
 async def commit_rollback():
     try:
-        await db.session.commit()
-    except:
-        await db.session.rollback()
+        await db.commit()
+    except Exception:
+        await db.rollback()
         raise
