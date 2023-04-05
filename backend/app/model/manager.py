@@ -18,3 +18,6 @@ class Manager(SQLModel, TimeMixin, table=True):
     first_name: str
     second_name: str
     patronym: str
+
+    users: Optional["Users"] = Relationship(
+        sa_relationship_kwargs={'uselist': False}, back_populates="manager")

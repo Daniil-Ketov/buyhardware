@@ -43,6 +43,7 @@ class RegisterManagerSchema(BaseModel):
     first_name: str
     second_name: str
     patronym: str
+    phone_number: str
 
 
 class LoginSchema(BaseModel):
