@@ -1,5 +1,3 @@
-from datetime import date
-from enum import Enum
 from typing import Optional
 from sqlmodel import SQLModel, Field, Relationship
 from app.model.mixins import TimeMixin

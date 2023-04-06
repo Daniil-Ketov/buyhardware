@@ -7,7 +7,7 @@ from .user_role import UsersRole
 class Role(SQLModel, TimeMixin, table=True):
     __tablename__ = "role"
 
-    id: Optional[str] = Field(None, primary_key=True, nullable=True)
+    id: Optional[str] = Field(None, primary_key=True, nullable=False)
     role_name: str
 
     users: List["Users"] = Relationship(

@@ -1,6 +1,4 @@
-from datetime import date
-from enum import Enum
-from typing import Optional
+from typing import List, Optional
 from sqlmodel import SQLModel, Field, Relationship
 from app.model.mixins import TimeMixin
 
@@ -21,3 +19,5 @@ class Manager(SQLModel, TimeMixin, table=True):
 
     users: Optional["Users"] = Relationship(
         sa_relationship_kwargs={'uselist': False}, back_populates="manager")
+    status_changes: List["StatusChanges"] = Relationship(
+        back_populates="manager")

@@ -1,5 +1,3 @@
-import base64
-from datetime import datetime
 from uuid import uuid4
 from fastapi import HTTPException
 from passlib.context import CryptContext
@@ -26,7 +24,7 @@ class AuthService:
         _user_id = str(uuid4())
 
         # Mapping request data to class entity table
-        _client = Client(id=_user_id,
+        _client = Client(user_id=_user_id,
                          name=register.name,
                          address=register.address,
                          postal_address=register.postal_address,
@@ -55,8 +53,8 @@ class AuthService:
 
         else:
             # Insert into tables
-            await ClientRepository.create(**_client.dict())
             await UsersRepository.create(**_users.dict())
+            await ClientRepository.create(**_client.dict())
             await UsersRoleRepository.create(**_users_role.dict())
 
     @staticmethod
@@ -66,7 +64,7 @@ class AuthService:
         _user_id = str(uuid4())
 
         # Mapping request data to class entity table
-        _manager = Manager(id=_user_id,
+        _manager = Manager(user_id=_user_id,
                            first_name=register.first_name,
                            second_name=register.second_name,
                            patronym=register.patronym)
@@ -94,8 +92,8 @@ class AuthService:
 
         else:
             # Insert into tables
-            await ManagerRepository.create(**_manager.dict())
             await UsersRepository.create(**_users.dict())
+            await ManagerRepository.create(**_manager.dict())
             await UsersRoleRepository.create(**_users_role.dict())
 
     @staticmethod
