@@ -5,7 +5,7 @@ from app.repository.base_repo import BaseRepo
 from app.repository.mixins import PaginationMixin
 
 
-class RoleRepository(PaginationMixin, BaseRepo):
+class HardwareRepository(PaginationMixin, BaseRepo):
     model = Hardware
 
     @staticmethod

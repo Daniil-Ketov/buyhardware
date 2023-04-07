@@ -21,4 +21,4 @@ class Users(SQLModel, TimeMixin, table=True):
         sa_relationship_kwargs={'uselist': False}, back_populates="users")
     manager: Optional["Manager"] = Relationship(
         sa_relationship_kwargs={'uselist': False}, back_populates="users")
-    orders: Optional["Order"] = Relationship(back_populates="user")
+    orders: Optional["Orders"] = Relationship(back_populates="user")

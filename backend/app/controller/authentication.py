@@ -12,23 +12,23 @@ router = APIRouter(prefix="/auth", tags=['Authentication'])
 @router.post("/register_client", response_model=ResponseSchema, response_model_exclude_none=True)
 async def register(request_body: RegisterSchema):
     await AuthService.register_client_service(request_body)
-    return ResponseSchema(detail="Succesfully save data!")
+    return ResponseSchema(detail="Данные успешно сохранены")
 
 
 @router.post("/register_manager", response_model=ResponseSchema, response_model_exclude_none=True)
 async def register(request_body: RegisterManagerSchema):
     await AuthService.register_manager_service(request_body)
-    return ResponseSchema(detail="Succesfully save data!")
+    return ResponseSchema(detail="Данные успешно сохранены")
 
 
 @router.post("/login", response_model=ResponseSchema)
 async def login(request_body: LoginSchema):
     token = await AuthService.login_service(request_body)
-    return ResponseSchema(detail="Successfully login",
+    return ResponseSchema(detail="Успешный вход",
                           result={"token_type": "Bearer", "access_token": token})
 
 
 @router.post("/forgot_password", response_model=ResponseSchema, response_model_exclude_none=True)
 async def forgot_password(request_body: ForgotPasswordSchema):
     await AuthService.forgot_password_service(request_body)
-    return ResponseSchema(detail="Successfully update data!")
+    return ResponseSchema(detail="Данные успешно обновлены")

@@ -11,7 +11,7 @@ from app.repository.user_role import UsersRoleRepository
 from app.repository.auth_repo import JWTRepo
 
 
-# Encrypt password
+# Шифрование паролей
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
@@ -20,10 +20,10 @@ class AuthService:
     @staticmethod
     async def register_client_service(register: RegisterSchema):
 
-        # Create uuid
+        # Создание uuid
         _user_id = str(uuid4())
 
-        # Mapping request data to class entity table
+        # Маппинг данных запроса в класс сущности таблицы
         _client = Client(user_id=_user_id,
                          name=register.name,
                          address=register.address,
@@ -36,23 +36,24 @@ class AuthService:
                        password=pwd_context.hash(register.password),
                        phone_number=register.phone_number)
 
-        # Everyone who registers through our registration page makes the default as client
+        # По умолчанию клиент становится клиентом при регистрации пользователя
         _role = await RoleRepository.find_by_role_name("client")
         _users_role = UsersRole(users_id=_user_id, role_id=_role.id)
 
-        # Checking the same username
+        # Проверка на существование пользователя с таким же логином в базе данных
         _username = await UsersRepository.find_by_username(register.username)
         if _username:
             raise HTTPException(
-                status_code=400, detail="Username already exist")
+                status_code=400, detail="Данный логин уже занят")
 
-        # Checking the same email
+        # Проверка на существование пользователя с таким же email в базе данных
         _email = await UsersRepository.find_by_email(register.email)
         if _email:
-            raise HTTPException(status_code=400, detail="Email already exist")
+            raise HTTPException(
+                status_code=400, detail="Пользователь с таким email уже существует")
 
         else:
-            # Insert into tables
+            # Добавление в базу данных
             await UsersRepository.create(**_users.dict())
             await ClientRepository.create(**_client.dict())
             await UsersRoleRepository.create(**_users_role.dict())
@@ -60,10 +61,10 @@ class AuthService:
     @staticmethod
     async def register_manager_service(register: RegisterManagerSchema):
 
-        # Create uuid
+        # Создание uuid
         _user_id = str(uuid4())
 
-        # Mapping request data to class entity table
+        # Маппинг данных запроса в класс сущности таблицы
         _manager = Manager(user_id=_user_id,
                            first_name=register.first_name,
                            second_name=register.second_name,
@@ -75,23 +76,23 @@ class AuthService:
                        password=pwd_context.hash(register.password),
                        phone_number=register.phone_number)
 
-        # Everyone who registers through our registration page makes the default as client
+        # По умолчанию менеджер становится менеджером при регистрации пользователя
         _role = await RoleRepository.find_by_role_name("manager")
         _users_role = UsersRole(users_id=_user_id, role_id=_role.id)
 
-        # Checking the same username
+        # Проверка на существование пользователя с таким же логином в базе данных
         _username = await UsersRepository.find_by_username(register.username)
         if _username:
             raise HTTPException(
                 status_code=400, detail="Username already exist")
 
-        # Checking the same email
+        # Проверка на существование пользователя с таким же email в базе данных
         _email = await UsersRepository.find_by_email(register.email)
         if _email:
             raise HTTPException(status_code=400, detail="Email already exist")
 
         else:
-            # Insert into tables
+            # Добавление в базу данных
             await UsersRepository.create(**_users.dict())
             await ManagerRepository.create(**_manager.dict())
             await UsersRoleRepository.create(**_users_role.dict())
@@ -114,7 +115,7 @@ class AuthService:
                                               pwd_context.hash(forgot_password.new_password))
 
 
-# Generate roles manually
+# Ручная генерация ролей
 async def generate_role():
     _role = await RoleRepository.find_by_list_role_name(["admin", "client", "manager"])
     if not _role:

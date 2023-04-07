@@ -19,9 +19,6 @@ class StatusChanges(SQLModel, TimeCreateMixin, table=True):
     id: str = Field(None, primary_key=True, nullable=False)
     status: Status
     orders_id: str = Field(None, foreign_key="orders.id")
-    manager_id: str = Field(None, foreign_key="manager.user_id")
 
-    orders: Optional["Order"] = Relationship(
-        back_populates="status_changes")
-    manager: Optional["Manager"] = Relationship(
+    orders: Optional["Orders"] = Relationship(
         back_populates="status_changes")

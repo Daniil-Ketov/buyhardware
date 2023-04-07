@@ -14,7 +14,7 @@ class Orders(SQLModel, TimeMixin, table=True):
 
     hardware_order: List["HardwareOrder"] = Relationship(
         back_populates="order")
-    contract: Optional["Contract"] = Relationship(back_populates="orders")
+    contract: Optional["Contracts"] = Relationship(back_populates="orders")
     status_changes: List["StatusChanges"] = Relationship(
         back_populates="orders")
     user: Optional["Users"] = Relationship(back_populates="orders")

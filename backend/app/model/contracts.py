@@ -10,5 +10,5 @@ class Contracts(SQLModel, TimeCreateMixin, table=True):
     id: str = Field(None, primary_key=True, nullable=False)
     order_id: str = Field(None, foreign_key="orders.id", nullable=False)
 
-    orders: Optional["Order"] = Relationship(
+    orders: Optional["Orders"] = Relationship(
         back_populates="contract")

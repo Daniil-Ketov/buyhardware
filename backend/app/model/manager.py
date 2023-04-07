@@ -19,5 +19,3 @@ class Manager(SQLModel, TimeMixin, table=True):
 
     users: Optional["Users"] = Relationship(
         sa_relationship_kwargs={'uselist': False}, back_populates="manager")
-    status_changes: List["StatusChanges"] = Relationship(
-        back_populates="manager")

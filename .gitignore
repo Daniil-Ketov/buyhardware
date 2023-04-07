@@ -1,0 +1,5 @@
+# Fastapi #
+*.log
+*.pyc
+__pycache__
+media

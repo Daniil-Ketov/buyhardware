@@ -1,8 +1,10 @@
 import logging
 import re
-from typing import Optional, TypeVar
+from datetime import date
+from typing import Optional, TypeVar, Generic, List
 from fastapi import HTTPException
 from pydantic import BaseModel, validator
+from pydantic.generics import GenericModel
 
 
 T = TypeVar('T')
@@ -56,6 +58,34 @@ class ForgotPasswordSchema(BaseModel):
     new_password: str
 
 
+class HardwareCreate(BaseModel):
+    name: str
+    type: str
+    price: int
+    short_description: str
+    full_description: str
+    image: str
+
+    @validator("price")
+    def price_validation(cls, v):
+        logger.debug(f"price in 2 validator: {v}")
+        if v and v < 0:
+            raise HTTPException(status_code=400, detail={
+                                "status": "Bad request", "message": "Цена не может быть отрицательной"})
+        return v
+
+
+class HardwareTypeCreate(BaseModel):
+    name: str
+    desc: str
+
+
+class OrderSchema(BaseModel):
+    username: str
+    items: List[T]
+    shipment_deadline: date
+
+
 class DetailSchema(BaseModel):
     status: str
     message: str
@@ -65,3 +95,13 @@ class DetailSchema(BaseModel):
 class ResponseSchema(BaseModel):
     detail: str
     result: Optional[T] = None
+
+
+class PageResponse(GenericModel, Generic[T]):
+    """ The response for a pagination query. """
+
+    page_number: int
+    page_size: int
+    total_pages: int
+    total_record: int
+    content: List[T]

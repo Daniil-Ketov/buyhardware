@@ -16,11 +16,11 @@ router = APIRouter(
 async def get_client_profile(credentials: HTTPAuthorizationCredentials = Security(JWTBearer())):
     token = JWTRepo().extract_token(credentials)
     result = await UserService.get_client_profile(token['username'])
-    return ResponseSchema(detail="Successfully fetch data!", result=result)
+    return ResponseSchema(detail="Данные успешно получены", result=result)
 
 
 @router.get("/manger", response_model=ResponseSchema, response_model_exclude_none=True)
 async def get_manager_profile(credentials: HTTPAuthorizationCredentials = Security(JWTBearer())):
     token = JWTRepo().extract_token(credentials)
     result = await UserService.get_manager_profile(token['username'])
-    return ResponseSchema(detail="Successfully fetch data!", result=result)
+    return ResponseSchema(detail="Данные успешно получены", result=result)
