@@ -11,4 +11,4 @@ class HardwareRepository(PaginationMixin, BaseRepo):
     @staticmethod
     async def find_by_name(name: str):
         query = select(Hardware).where(Hardware.name == name)
-        return (await db.execute(query)).scalars.all()
+        return (await db.execute(query)).mappings().all()

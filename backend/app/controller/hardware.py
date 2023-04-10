@@ -65,7 +65,6 @@ async def create_hardware_type(
 @router.get("/type/", response_model=ResponseSchema, response_model_exclude_none=True)
 async def get_all_hardware_type():
     result = await HardwareTypeRepository.get_all()
-    print(result)
     return ResponseSchema(detail="Успешно получены данные о типах оборудования", result=result)
 
 

@@ -64,7 +64,44 @@ class ShopService:
 
     @staticmethod
     async def check_is_order_owner_or_staff(order_id: str, username: str):
+        _order = await OrdersRepository.get_by_id(order_id)
+        if not _order:
+            raise HTTPException(
+                status_code=400, detail="Заказ с таким id не найден")
         roles = await UserService.get_user_roles(username)
         _user_id = await UserService.get_user_id_by_username(username)
-        _order = await OrdersRepository.get_by_id(order_id)
         return _order.user_id == _user_id or check_is_manager_or_admin(roles)
+
+    @staticmethod
+    async def delete_order_service(order_id: str, username: str):
+        if await ShopService.check_is_order_owner_or_staff(order_id, username):
+            await StatusChangesRepository.delete_by_order_id(order_id)
+            await HardwareOrderRepository.delete(order_id)
+            await OrdersRepository.delete(order_id)
+        raise HTTPException(
+            status_code=403, detail="Нет прав на удаление заказа")
+
+    @staticmethod
+    async def update_order_service(order_id: str, username: str, order: OrderSchema):
+        if await ShopService.check_is_order_owner_or_staff(order_id, username):
+            _order = await OrdersRepository.get_by_id(order_id)
+            if _order.shipment_deadline > order.shipment_deadline:
+                raise HTTPException(
+                    status_code=400, detail="Дата доствки не может быть меньше изначальной")
+            _hardware_order = []
+            _total = 0
+            for item in order.items:
+                _hardware: Hardware = await HardwareRepository.get_by_id(item.id)
+                _value = _hardware.price * int(item.volume)
+                _total += _value
+                _hardware_order.append(HardwareOrder(hardware_id=item.id,
+                                                     order_id=order_id,
+                                                     volume=item.volume,
+                                                     value=_value))
+            await OrdersRepository.update(order_id, shipment_deadline=order.shipment_deadline,
+                                          total=_total)
+            await HardwareOrderRepository.delete(order_id)
+            await HardwareOrderRepository.create_list(_hardware_order)
+            return None
+        raise HTTPException(
+            status_code=403, detail="Нет прав на изменение заказа")

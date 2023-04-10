@@ -1,6 +1,6 @@
 import logging
 import re
-from datetime import date
+from datetime import date, datetime
 from typing import Optional, TypeVar, Generic, List
 from fastapi import HTTPException
 from pydantic import BaseModel, validator
@@ -88,6 +88,14 @@ class OrderItemSchema(BaseModel):
 class OrderSchema(BaseModel):
     items: List[OrderItemSchema]
     shipment_deadline: date
+
+    @validator("shipment_deadline")
+    def shipment_deadline_validation(cls, v):
+        logger.debug(f"shipment_deadline in 2 validator: {v}")
+        if v and v < datetime.now().date():
+            raise HTTPException(status_code=400, detail={
+                                "status": "Bad request", "message": "Дата доставки не может быть меньше текущей"})
+        return v
 
 
 class DetailSchema(BaseModel):

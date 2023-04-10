@@ -1,6 +1,6 @@
 from datetime import timedelta, datetime
 from typing import Optional
-from jose import jwt
+from jose import jwt, ExpiredSignatureError
 from fastapi import Request, HTTPException
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from app.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
@@ -29,8 +29,10 @@ class JWTRepo:
             decode_token = jwt.decode(
                 self.token, SECRET_KEY, algorithms=[ALGORITHM])
             return decode_token if decode_token["expires"] >= datetime.time() else None
-        except:
-            return {}
+        except ExpiredSignatureError:
+            raise HTTPException(status_code=401, detail="Токен истёк")
+        except Exception:
+            raise HTTPException(status_code=401, detail="Токен недействителен")
 
     @staticmethod
     def extract_token(token: str):
@@ -58,4 +60,9 @@ class JWTBearer(HTTPBearer):
 
     @staticmethod
     def verify_token(jwt_token):
-        return True if jwt.decode(jwt_token, SECRET_KEY, algorithms=[ALGORITHM]) is not None else False
+        try:
+            return True if jwt.decode(jwt_token, SECRET_KEY, algorithms=[ALGORITHM]) is not None else False
+        except ExpiredSignatureError:
+            raise HTTPException(status_code=401, detail="Токен истёк")
+        except Exception:
+            raise HTTPException(status_code=401, detail="Токен недействителен")
