@@ -98,6 +98,47 @@ class AuthService:
             await UsersRoleRepository.create(**_users_role.dict())
 
     @staticmethod
+    async def register_admin_service(register: RegisterManagerSchema):
+
+        # Создание uuid
+        _user_id = str(uuid4())
+
+        # Маппинг данных запроса в класс сущности таблицы
+        _manager = Manager(user_id=_user_id,
+                           first_name=register.first_name,
+                           second_name=register.second_name,
+                           patronym=register.patronym)
+
+        _users = Users(id=_user_id,
+                       username=register.username,
+                       email=register.email,
+                       password=pwd_context.hash(register.password),
+                       phone_number=register.phone_number)
+
+        # По умолчанию менеджер становится менеджером при регистрации пользователя
+        _role = await RoleRepository.find_by_list_role_name(['admin', 'manager'])
+        _users_role1 = UsersRole(users_id=_user_id, role_id=_role[0].id)
+        _users_role2 = UsersRole(users_id=_user_id, role_id=_role[1].id)
+
+        # Проверка на существование пользователя с таким же логином в базе данных
+        _username = await UsersRepository.find_by_username(register.username)
+        if _username:
+            raise HTTPException(
+                status_code=400, detail="Username already exist")
+
+        # Проверка на существование пользователя с таким же email в базе данных
+        _email = await UsersRepository.find_by_email(register.email)
+        if _email:
+            raise HTTPException(status_code=400, detail="Email already exist")
+
+        else:
+            # Добавление в базу данных
+            await UsersRepository.create(**_users.dict())
+            await ManagerRepository.create(**_manager.dict())
+            await UsersRoleRepository.create(**_users_role1.dict())
+            await UsersRoleRepository.create(**_users_role2.dict())
+
+    @staticmethod
     async def login_service(login: LoginSchema):
         _username = await UsersRepository.find_by_username(login.username)
         if _username is not None:

@@ -1,5 +1,6 @@
 from sqlalchemy.future import select
-from app.model import Users, Client, Manager
+from app.model import Users, Client, Manager, Role, UsersRole
+from app.repository.users import UsersRepository
 from app.config import db
 
 
@@ -23,3 +24,9 @@ class UserService:
                        Manager.second_name,
                        Manager.patronym).join_from(Users, Manager).where(Users.username == username)
         return (await db.execute(query)).mappings().one()
+
+    @staticmethod
+    async def ger_user_roles(username: str):
+        query = select(Role.role_name).join_from(
+            Role, UsersRole).join_from(UsersRole, Users).where(Users.username == username)
+        return (await db.execute(query)).mappings().all()

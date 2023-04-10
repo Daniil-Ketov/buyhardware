@@ -7,7 +7,7 @@ from app.repository.auth_repo import JWTBearer, JWTRepo
 
 router = APIRouter(
     prefix="/users",
-    tags=['user'],
+    tags=['Users'],
     dependencies=[Depends(JWTBearer())]
 )
 

@@ -1,9 +1,8 @@
-from fastapi import APIRouter, Depends, Security
-from fastapi.security import HTTPAuthorizationCredentials
+from fastapi import APIRouter, Depends
 from app.schema import ResponseSchema, RegisterSchema, RegisterManagerSchema, LoginSchema, ForgotPasswordSchema
 from app.service.auth_service import AuthService
-from app.repository.auth_repo import JWTBearer, JWTRepo
-from app.controller.permissions import allow_create_manager
+from app.repository.auth_repo import JWTBearer
+from app.controller.permissions import is_admin
 
 
 router = APIRouter(prefix="/auth", tags=['Authentication'])
@@ -15,9 +14,15 @@ async def register(request_body: RegisterSchema):
     return ResponseSchema(detail="Данные успешно сохранены")
 
 
-@router.post("/register_manager", response_model=ResponseSchema, response_model_exclude_none=True)
+@router.post("/register_manager", response_model=ResponseSchema, response_model_exclude_none=True, dependencies=[Depends(JWTBearer()), Depends(is_admin)])
 async def register(request_body: RegisterManagerSchema):
     await AuthService.register_manager_service(request_body)
+    return ResponseSchema(detail="Данные успешно сохранены")
+
+
+@router.post("/register_admin", response_model=ResponseSchema, response_model_exclude_none=True, dependencies=[Depends(JWTBearer()), Depends(is_admin)])
+async def register(request_body: RegisterManagerSchema):
+    await AuthService.register_admin_service(request_body)
     return ResponseSchema(detail="Данные успешно сохранены")
 
 

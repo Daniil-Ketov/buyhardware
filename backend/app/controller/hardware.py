@@ -1,17 +1,15 @@
-from fastapi import APIRouter, Depends, Security, Query
-from fastapi.security import HTTPAuthorizationCredentials
-from app.schema import HardwareCreate, OrderSchema, PageResponse, ResponseSchema, HardwareTypeCreate
-from app.service.shop_service import ShopService
-from app.repository.auth_repo import JWTBearer, JWTRepo
+from fastapi import APIRouter, Depends, Query, Path
+from app.schema import HardwareCreate, ResponseSchema, HardwareTypeCreate
+from app.repository.auth_repo import JWTBearer
 from app.repository.hardware import HardwareRepository
 from app.repository.hardware_type import HardwareTypeRepository
-from app.controller.permissions import allow_create_manager
+from app.controller.permissions import is_manager_or_admin
 
 
 router = APIRouter(prefix="/hardware", tags=['Hardware'])
 
 
-@router.post("", response_model=ResponseSchema, response_model_exclude_none=True)
+@router.post("", response_model=ResponseSchema, response_model_exclude_none=True, dependencies=[Depends(JWTBearer()), Depends(is_manager_or_admin)])
 async def create_hardware(
         create_form: HardwareCreate
 ):
@@ -19,12 +17,30 @@ async def create_hardware(
     return ResponseSchema(detail="Данные успешно созданы")
 
 
-@router.post("/hardware_type", response_model=ResponseSchema, response_model_exclude_none=True)
-async def create_hardware_type(
-        create_form: HardwareTypeCreate
+@router.patch("/{id}", response_model=ResponseSchema, response_model_exclude_none=True, dependencies=[Depends(JWTBearer()), Depends(is_manager_or_admin)])
+async def update_hardware(
+        hardware_id: str = Path(..., alias="id"),
+        *,
+        update_form: HardwareCreate
 ):
-    await HardwareTypeRepository.create(create_form)
-    return ResponseSchema(detail="Данные успешно созданы")
+    await HardwareRepository.update(hardware_id, update_form)
+    return ResponseSchema(detail="Данные успешно обновлены")
+
+
+@router.delete("/{id}", response_model=ResponseSchema, response_model_exclude_none=True, dependencies=[Depends(JWTBearer()), Depends(is_manager_or_admin)])
+async def delete_hardware(
+        hardware_id: str = Path(..., alias="id"),
+):
+    await HardwareRepository.delete(hardware_id)
+    return ResponseSchema(detail="Данные успешно удалены")
+
+
+@router.get("/{id}", response_model=ResponseSchema, response_model_exclude_none=True)
+async def get_hardware_by_id(
+        hardware_id: str = Path(..., alias="id")
+):
+    result = await HardwareRepository.get_by_id(hardware_id)
+    return ResponseSchema(detail="Данные об оборудовании с данным id успешно извлечены", result=result)
 
 
 @router.get("", response_model=ResponseSchema, response_model_exclude_none=True)
@@ -35,3 +51,35 @@ async def get_all_hardware(page: int = 1,
                            filter: str = Query(None, alias="filter")):
     result = await HardwareRepository.get_all(page, limit, columns, sort, filter)
     return ResponseSchema(detail="Успешно получены данные об оборудовании", result=result)
+
+
+@router.post("/type", response_model=ResponseSchema, response_model_exclude_none=True, dependencies=[Depends(JWTBearer()), Depends(is_manager_or_admin)])
+async def create_hardware_type(
+        create_form: HardwareTypeCreate
+):
+    await HardwareTypeRepository.create(create_form)
+    return ResponseSchema(detail="Данные успешно созданы")
+
+
+@router.get("/type", response_model=ResponseSchema, response_model_exclude_none=True)
+async def get_all_hardware_type():
+    result = await HardwareTypeRepository.get_all()
+    return ResponseSchema(detail="Успешно получены данные о типах оборудования", result=result)
+
+
+@router.patch("/type/{id}", response_model=ResponseSchema, response_model_exclude_none=True, dependencies=[Depends(JWTBearer()), Depends(is_manager_or_admin)])
+async def update_hardware(
+        hardware_type_id: str = Path(..., alias="id"),
+        *,
+        update_form: HardwareTypeCreate
+):
+    await HardwareTypeRepository.update(hardware_type_id, update_form)
+    return ResponseSchema(detail="Данные успешно обновлены")
+
+
+@router.delete("/type/{id}", response_model=ResponseSchema, response_model_exclude_none=True, dependencies=[Depends(JWTBearer()), Depends(is_manager_or_admin)])
+async def delete_hardware(
+        hardware_type_id: str = Path(..., alias="id"),
+):
+    await HardwareTypeRepository.delete(hardware_type_id)
+    return ResponseSchema(detail="Данные успешно удалены")
