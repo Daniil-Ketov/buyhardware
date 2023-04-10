@@ -1,4 +1,5 @@
 from uuid import uuid4
+from typing import TypeVar
 from fastapi import HTTPException
 from app.schema import OrderSchema
 from app.model import Hardware, HardwareOrder, Orders, Users
@@ -8,6 +9,11 @@ from app.repository.hardware_order import HardwareOrderRepository
 from app.repository.status_changes import StatusChangesRepository
 from app.repository.orders import OrdersRepository
 from app.repository.users import UsersRepository
+from app.service.users import UserService
+from app.controller.permissions import check_is_manager_or_admin
+
+
+T = TypeVar('T')
 
 
 class ShopService:
@@ -45,3 +51,20 @@ class ShopService:
         await StatusChangesRepository.create(**_status_change.dict())
 
         return _order_id
+
+    @staticmethod
+    async def retrive_orders_by_username_service(username: str):
+        _user: Users = await UsersRepository.find_by_username(username)
+        if not _user:
+            raise HTTPException(
+                status_code=400, detail="Пользователь не найден")
+        _orders = await OrdersRepository.find_by_user_id(_user.id)
+
+        return _orders
+
+    @staticmethod
+    async def check_is_order_owner_or_staff(order_id: str, username: str):
+        roles = await UserService.get_user_roles(username)
+        _user_id = await UserService.get_user_id_by_username(username)
+        _order = await OrdersRepository.get_by_id(order_id)
+        return _order.user_id == _user_id or check_is_manager_or_admin(roles)

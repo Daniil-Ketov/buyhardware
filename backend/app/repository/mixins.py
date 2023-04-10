@@ -107,7 +107,7 @@ class PaginationMixin:
 
     model = Generic[T]
 
-    @staticmethod
+    @classmethod
     async def get_all(
         cls,
         page: int = 1,
@@ -165,7 +165,7 @@ class PaginationMixin:
         total_page = math.ceil(total_record / limit)
 
         # Результат
-        result = (await db.execute(query)).fetchall()
+        result = (await db.execute(query)).mappings().all()
 
         return PageResponse(
             page_number=page,

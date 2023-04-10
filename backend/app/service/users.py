@@ -26,7 +26,12 @@ class UserService:
         return (await db.execute(query)).mappings().one()
 
     @staticmethod
-    async def ger_user_roles(username: str):
+    async def get_user_roles(username: str):
         query = select(Role.role_name).join_from(
             Role, UsersRole).join_from(UsersRole, Users).where(Users.username == username)
         return (await db.execute(query)).mappings().all()
+
+    @staticmethod
+    async def get_user_id_by_username(username: str):
+        user = await UsersRepository.find_by_username(username)
+        return user.id

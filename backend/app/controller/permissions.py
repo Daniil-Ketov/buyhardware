@@ -15,7 +15,7 @@ class RoleChecker:
     async def __call__(self, credentials: HTTPAuthorizationCredentials = Security(JWTBearer())):
         username = JWTRepo().extract_token(credentials)['username']
 
-        roles = await UserService().ger_user_roles(username)
+        roles = await UserService().get_user_roles(username)
 
         allowed = False
 
@@ -32,3 +32,7 @@ is_admin = RoleChecker(["admin"])
 is_manager = RoleChecker(["manager"])
 is_client = RoleChecker(["client"])
 is_manager_or_admin = RoleChecker(["manager", "admin"])
+
+
+def check_is_manager_or_admin(roles: List[str]):
+    return 'manager' in roles or 'admin' in roles
