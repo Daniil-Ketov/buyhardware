@@ -23,7 +23,7 @@ class RetrieveMixin:
     @classmethod
     async def get_all(cls):
         query = select(cls.model)
-        return (await db.execute(query)).scalars.all()
+        return (await db.execute(query)).mappings().all()
 
     @classmethod
     async def get_by_id(cls, model_id: str):

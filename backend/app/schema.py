@@ -80,9 +80,13 @@ class HardwareTypeCreate(BaseModel):
     desc: str
 
 
+class OrderItemSchema(BaseModel):
+    id: str
+    volume: str
+
+
 class OrderSchema(BaseModel):
-    username: str
-    items: List[T]
+    items: List[OrderItemSchema]
     shipment_deadline: date
 
 

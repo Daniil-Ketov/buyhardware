@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Query, Path
+from uuid import uuid4
 from app.schema import HardwareCreate, ResponseSchema, HardwareTypeCreate
 from app.repository.auth_repo import JWTBearer
 from app.repository.hardware import HardwareRepository
@@ -13,7 +14,7 @@ router = APIRouter(prefix="/hardware", tags=['Hardware'])
 async def create_hardware(
         create_form: HardwareCreate
 ):
-    await HardwareRepository.create(create_form)
+    await HardwareRepository.create(id=str(uuid4()), **create_form.dict())
     return ResponseSchema(detail="Данные успешно созданы")
 
 
@@ -53,17 +54,18 @@ async def get_all_hardware(page: int = 1,
     return ResponseSchema(detail="Успешно получены данные об оборудовании", result=result)
 
 
-@router.post("/type", response_model=ResponseSchema, response_model_exclude_none=True, dependencies=[Depends(JWTBearer()), Depends(is_manager_or_admin)])
+@router.post("/type/", response_model=ResponseSchema, response_model_exclude_none=True, dependencies=[Depends(JWTBearer()), Depends(is_manager_or_admin)])
 async def create_hardware_type(
         create_form: HardwareTypeCreate
 ):
-    await HardwareTypeRepository.create(create_form)
+    await HardwareTypeRepository.create(**create_form.dict())
     return ResponseSchema(detail="Данные успешно созданы")
 
 
-@router.get("/type", response_model=ResponseSchema, response_model_exclude_none=True)
+@router.get("/type/", response_model=ResponseSchema, response_model_exclude_none=True)
 async def get_all_hardware_type():
     result = await HardwareTypeRepository.get_all()
+    print(result)
     return ResponseSchema(detail="Успешно получены данные о типах оборудования", result=result)
 
 

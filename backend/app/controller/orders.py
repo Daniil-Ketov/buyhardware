@@ -14,6 +14,5 @@ router = APIRouter(prefix="/orders", tags=['Orders'])
 @router.post("", response_model=ResponseSchema, response_model_exclude_none=True)
 async def create_order(order_form: OrderSchema,
                        credentials: HTTPAuthorizationCredentials = Security(JWTBearer())):
-    order_form.username = JWTRepo().extract_token(credentials)["username"]
-    await ShopService.create_order(order_form)
+    await ShopService.create_order_service(JWTRepo().extract_token(credentials)["username"], order_form)
     return ResponseSchema(detail="Заказ успешно создан")

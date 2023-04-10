@@ -13,26 +13,26 @@ from app.repository.users import UsersRepository
 class ShopService:
 
     @staticmethod
-    async def create_order_service(order: OrderSchema):
-
+    async def create_order_service(username: str, order: OrderSchema):
         _order_id = str(uuid4())
-        _user_id = UsersRepository.find_by_username(order.username)['id']
+        _user: Users = await UsersRepository.find_by_username(username)
         _status_change_id = str(uuid4())
 
-        if not _user_id:
+        if not _user:
             raise HTTPException(
                 status_code=400, detail="Пользователь не найден")
-
-        _hardware_order = [HardwareOrder(hardware_id=item.id,
-                                         order_id=_order_id,
-                                         volume=item.volume,
-                                         value=HardwareRepository.get_by_id(item.id)["price"] * item.volume)
-                           for item in order.items]
-
-        _total = sum([item.value for item in _hardware_order])
-
+        _hardware_order = []
+        _total = 0
+        for item in order.items:
+            _hardware: Hardware = await HardwareRepository.get_by_id(item.id)
+            _value = _hardware.price * int(item.volume)
+            _total += _value
+            _hardware_order.append(HardwareOrder(hardware_id=item.id,
+                                                 order_id=_order_id,
+                                                 volume=item.volume,
+                                                 value=_value))
         _order = Orders(id=_order_id,
-                        user_id=_user_id,
+                        user_id=_user.id,
                         total=_total,
                         shipment_deadline=order.shipment_deadline)
 
@@ -40,8 +40,8 @@ class ShopService:
                                        orders_id=_order_id,
                                        status=Status.CREATED)
 
-        await OrdersRepository.create(_order)
-        await HardwareOrderRepository.create_many(_hardware_order)
-        await StatusChangesRepository.create(_status_change)
+        await OrdersRepository.create(**_order.dict())
+        await HardwareOrderRepository.create_list(_hardware_order)
+        await StatusChangesRepository.create(**_status_change.dict())
 
         return _order_id
