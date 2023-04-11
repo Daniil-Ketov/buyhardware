@@ -5,6 +5,7 @@ from typing import Optional, TypeVar, Generic, List
 from fastapi import HTTPException
 from pydantic import BaseModel, validator
 from pydantic.generics import GenericModel
+from app.model.status_changes import Status
 
 
 T = TypeVar('T')
@@ -96,6 +97,18 @@ class OrderSchema(BaseModel):
             raise HTTPException(status_code=400, detail={
                                 "status": "Bad request", "message": "Дата доставки не может быть меньше текущей"})
         return v
+
+
+class StatusChangeSchema(BaseModel):
+    status: Status
+    orders_id: str
+
+
+class HardwareOrderSchema(BaseModel):
+    hardware_id: str
+    order_id: str
+    volume: int
+    value: int
 
 
 class DetailSchema(BaseModel):

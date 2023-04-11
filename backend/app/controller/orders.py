@@ -1,9 +1,11 @@
-from fastapi import APIRouter, Security, Path, HTTPException
+from fastapi import APIRouter, Security, Depends, Path, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials
 from app.schema import OrderSchema, ResponseSchema
 from app.service.shop_service import ShopService
 from app.repository.auth_repo import JWTBearer, JWTRepo
 from app.repository.orders import OrdersRepository
+from app.repository.status_changes import StatusChangesRepository
+from app.controller.permissions import is_manager_or_admin
 
 
 router = APIRouter(prefix="/orders", tags=['Orders'])
@@ -22,6 +24,12 @@ async def get_user_orders(credentials: HTTPAuthorizationCredentials = Security(J
     token = JWTRepo().extract_token(credentials)
     result = await ShopService.retrive_orders_by_username_service(token["username"])
     return ResponseSchema(detail="Заказы пользователя успешно получены", result=result)
+
+
+@router.get("/all/", response_model=ResponseSchema, response_model_exclude_none=True, dependencies=[Depends(JWTBearer()), Depends(is_manager_or_admin)])
+async def get_user_orders():
+    result = await OrdersRepository.get_all()
+    return ResponseSchema(detail="Заказы успешно получены", result=result)
 
 
 @router.patch("/{id}", response_model=ResponseSchema, response_model_exclude_none=True)
@@ -58,4 +66,16 @@ async def get_order_by_id(
     if await ShopService.check_is_order_owner_or_staff(order_id, token["username"]):
         result = await OrdersRepository.get_by_id(order_id)
         return ResponseSchema(detail="Данные о заказе с данным id успешно извлечены", result=result)
+    raise HTTPException(status_code=403, detail="Нет прав на просмотр заказа")
+
+
+@router.get("/{id}/status", response_model=ResponseSchema, response_model_exclude_none=True)
+async def get_order_by_id(
+        order_id: str = Path(..., alias="id"),
+        credentials: HTTPAuthorizationCredentials = Security(JWTBearer())
+):
+    token = JWTRepo().extract_token(credentials)
+    if await ShopService.check_is_order_owner_or_staff(order_id, token["username"]):
+        result = await StatusChangesRepository.find_by_order_id(order_id)
+        return ResponseSchema(detail="Данные о статусах заказа с данным id успешно извлечены", result=result)
     raise HTTPException(status_code=403, detail="Нет прав на просмотр заказа")

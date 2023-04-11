@@ -2,12 +2,18 @@ from typing import List
 from sqlalchemy.future import select
 from app.model import HardwareOrder
 from app.repository.mixins import RetrieveCreateMixin
-from sqlalchemy import delete as sql_delete
+from sqlalchemy import update as sql_update, delete as sql_delete
 from app.config import db, commit_rollback
 
 
 class HardwareOrderRepository(RetrieveCreateMixin):
     model = HardwareOrder
+
+    @staticmethod
+    async def get_by_id(order_id, hardware_id):
+        query = select(HardwareOrder).where(HardwareOrder.order_id ==
+                                            order_id and HardwareOrder.hardware_id == hardware_id)
+        return (await db.execute(query)).scalar_one_or_none()
 
     @staticmethod
     async def create_list(hardware_order: List[HardwareOrder]):
@@ -20,9 +26,23 @@ class HardwareOrderRepository(RetrieveCreateMixin):
             HardwareOrder.order_id == order_id)
         return (await db.execute(query)).scalars().all()
 
-    @classmethod
-    async def delete(cls, order_id):
+    @staticmethod
+    async def update(order_id: str, **kwargs):
+        query = sql_update(HardwareOrder).where(
+            HardwareOrder.order_id == order_id).values(**kwargs).execution_options(synchronize_session="fetch")
+        await db.execute(query)
+        await commit_rollback()
+
+    @staticmethod
+    async def delete(order_id):
         query = sql_delete(HardwareOrder).where(
             HardwareOrder.order_id == order_id)
+        await db.execute(query)
+        await commit_rollback()
+
+    @staticmethod
+    async def delete_one(order_id, hardware_id):
+        query = sql_delete(HardwareOrder).where(
+            HardwareOrder.order_id == order_id and HardwareOrder.hardware_id == hardware_id)
         await db.execute(query)
         await commit_rollback()
