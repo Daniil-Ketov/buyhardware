@@ -2,7 +2,7 @@ from typing import List
 from fastapi import Security, HTTPException
 from fastapi.security import HTTPAuthorizationCredentials, OAuth2PasswordBearer
 from app.repository.auth_repo import JWTBearer, JWTRepo
-from app.service.users import UserService
+from app.repository.users import UsersRepository
 
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -15,12 +15,12 @@ class RoleChecker:
     async def __call__(self, credentials: HTTPAuthorizationCredentials = Security(JWTBearer())):
         username = JWTRepo().extract_token(credentials)['username']
 
-        roles = await UserService().get_user_roles(username)
+        roles = await UsersRepository.get_user_roles(username)
 
         allowed = False
 
         for role in roles:
-            if role['role_name'] in self.allowed_roles:
+            if role in self.allowed_roles:
                 allowed = True
 
         if not allowed:

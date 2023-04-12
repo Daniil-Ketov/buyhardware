@@ -4,3 +4,4 @@ from app.repository.base_repo import BaseRepo
 
 class ManagerRepository(BaseRepo):
     model = Manager
+    id = "user_id"

@@ -9,7 +9,6 @@ from app.repository.hardware_order import HardwareOrderRepository
 from app.repository.status_changes import StatusChangesRepository
 from app.repository.orders import OrdersRepository
 from app.repository.users import UsersRepository
-from app.service.users import UserService
 from app.controller.permissions import check_is_manager_or_admin
 
 
@@ -68,8 +67,13 @@ class ShopService:
         if not _order:
             raise HTTPException(
                 status_code=400, detail="Заказ с таким id не найден")
-        roles = await UserService.get_user_roles(username)
-        _user_id = await UserService.get_user_id_by_username(username)
+        roles = await UsersRepository.get_user_roles(username)
+        _user_id = await UsersRepository.get_user_id_by_username(username)
+
+        if not _user_id:
+            raise HTTPException(
+                status_code=404, detail='Пользователь не найден')
+
         return _order.user_id == _user_id or check_is_manager_or_admin(roles)
 
     @staticmethod

@@ -19,6 +19,7 @@ class RetrieveMixin:
     """
 
     model = Generic[T]
+    id = "id"
 
     @classmethod
     async def get_all(cls):
@@ -27,7 +28,7 @@ class RetrieveMixin:
 
     @classmethod
     async def get_by_id(cls, model_id: str):
-        query = select(cls.model).where(cls.model.id == model_id)
+        query = select(cls.model).where(getattr(cls.model, cls.id) == model_id)
         return (await db.execute(query)).scalar_one_or_none()
 
 
@@ -50,11 +51,12 @@ class UpdateMixin:
     Миксин для обновления объектов в базе данных.
     """
     model = Generic[T]
+    id = "id"
 
     @classmethod
     async def update(cls, model_id: str, **kwargs):
         query = sql_update(cls.model).where(
-            cls.model.id == model_id).values(**kwargs).execution_options(synchronize_session="fetch")
+            getattr(cls.model, cls.id) == model_id).values(**kwargs).execution_options(synchronize_session="fetch")
         await db.execute(query)
         await commit_rollback()
 
@@ -64,10 +66,12 @@ class DeleteMixin:
     Миксин для удаления объектов из базы данных.
     """
     model = Generic[T]
+    id = "id"
 
     @classmethod
     async def delete(cls, model_id: str):
-        query = sql_delete(cls.model).where(cls.model.id == model_id)
+        query = sql_delete(cls.model).where(
+            getattr(cls.model, cls.id) == model_id)
         await db.execute(query)
         await commit_rollback()
 

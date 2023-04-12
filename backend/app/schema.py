@@ -26,12 +26,12 @@ class RegisterSchema(BaseModel):
     postal_address: str
     tin: str
 
-    # Phone number validation
+    # Валидация номера телефона
     @validator("phone_number")
     def phone_validation(cls, v):
         logger.debug(f"phone in 2 validator: {v}")
 
-        # Regex phone number
+        # Регулярное выражение для проверки номера телефона
         regex = r"^[\+]?[0-9]{1,3}-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
         if v and not re.search(regex, v, re.I):
             raise HTTPException(status_code=400, detail={
@@ -47,6 +47,60 @@ class RegisterManagerSchema(BaseModel):
     second_name: str
     patronym: str
     phone_number: str
+
+    # Валидация номера телефона
+    @validator("phone_number")
+    def phone_validation(cls, v):
+        logger.debug(f"phone in 2 validator: {v}")
+
+        # Регулярное выражение для проверки номера телефона
+        regex = r"^[\+]?[0-9]{1,3}-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
+        if v and not re.search(regex, v, re.I):
+            raise HTTPException(status_code=400, detail={
+                                "status": "Bad request", "message": "Неподдерживаемый формат номера"})
+        return v
+
+
+class UpdateUser(BaseModel):
+    email: str
+    phone_number: str
+
+
+class UpdateClientProfile(BaseModel):
+    address: str
+    postal_address: str
+    tin: str
+
+
+class UpdateManagerProfile(BaseModel):
+    first_name: str
+    second_name: str
+    patronym: str
+
+
+class UpdateProfileSchema(BaseModel):
+    email: str
+    phone_number: str
+    name: Optional[str]
+    first_name: Optional[str]
+    second_name: Optional[str]
+    patronym: Optional[str]
+    address: Optional[str]
+    postal_address: Optional[str]
+    tin: Optional[str]
+
+    # Валидация номера телефона
+
+    @validator("phone_number")
+    def phone_validation(cls, v):
+        logger.debug(f"phone in 2 validator: {v}")
+
+        # Регулярное выражение для проверки номера телефона
+        regex = r"^[\+]?[0-9]{1,3}-[0-9]{3}-[0-9]{3}-[0-9]{2}-[0-9]{2}"
+        if v and not re.search(regex, v, re.I):
+            raise HTTPException(status_code=400, detail={
+                                "status": "Bad request", "message": "Неподдерживаемый формат номера"})
+        return v
 
 
 class LoginSchema(BaseModel):
