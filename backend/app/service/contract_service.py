@@ -10,13 +10,61 @@ from app.config import db
 class ContractService:
 
     @staticmethod
-    async def get_blank():
+    async def get_blank(items: int):
         enviroment = Environment(loader=FileSystemLoader(
             "./templates/"), enable_async=True)
 
         template = enviroment.get_template("contract.html")
 
-        return await template.render_async()
+        city = ""
+
+        class Date:
+            pass
+        order_date = Date()
+        order_date.year = ""
+        order_date.month = ""
+        order_date.day = ""
+        months = ["" * 12]
+        warehouse = ""
+        total = ""
+        order_items = [{'Наименование': "", 'Количество': "",
+                        'Стоимость': ""} for _ in range(items)]
+        taxes = {"total": "", "first_payment": "",
+                 "second_payment": ""}
+        first_payment = {"percents": "", "amount": ""}
+        second_payment = {"percents": "", "amount": ""}
+        penalty = {"self": {"day": "", "max": ""},
+                   "client": {"day": "", "max": ""}}
+        company = {"name": "",
+                   "address": "",
+                   "postal_address": "",
+                   "tin": "",
+                   "bank": "",
+                   "bik": "",
+                   "ks": "",
+                   "corr_account": "",
+                   "bank_account": ""
+                   }
+        client = {"name": "",
+                  "address": "",
+                  "postal_address": "",
+                  "tin": ""
+                  }
+
+        return await template.render_async(
+            city=city,
+            order_date=order_date,
+            months=months,
+            warehouse=warehouse,
+            taxes=taxes,
+            first_payment=first_payment,
+            second_payment=second_payment,
+            penalty=penalty,
+            company=company,
+            client=client,
+            order_items=order_items,
+            total=total
+        )
 
     @staticmethod
     async def create_contract(order_id: str):

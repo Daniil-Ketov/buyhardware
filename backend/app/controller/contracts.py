@@ -20,7 +20,9 @@ async def get_contract(
     return HTMLResponse(file)
 
 
-@router.get("/", response_model=ResponseSchema, response_model_exclude_none=True)
-async def get_contract():
-    file = await ContractService.get_blank()
+@router.get("/blank/{items}", response_model=ResponseSchema, response_model_exclude_none=True)
+async def get_blank_contract(
+    items: int = Path(..., alias="items")
+):
+    file = await ContractService.get_blank(items)
     return HTMLResponse(file)

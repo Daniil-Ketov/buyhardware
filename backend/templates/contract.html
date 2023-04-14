@@ -130,7 +130,7 @@
 <strong>оборудования</strong>
 
 <div class="city">г. {{ city }}<span></span></div>
-<div class="date">«<span style="width: 20px;">{{ order_date.day }}</span>» <span style="width: 120px;">{{ months[order_date.month - 1] }}</span> {{ order_date.year }} г.</div>
+<div class="date">«<span style="width: 20px;">{{ order_date.day }}</span>» <span style="width: 120px;">{{ months[order_date.month - 1] if order_date.month is not string else "" }}</span> {{ order_date.year }} г.</div>
 <div class="clear"></div>
 <span class="i200">{{ company["name"] }}</span>, действующая на основании <span class="i200">регламента о поставках</span>, именуемый в дальнейшем «<b>Продавец</b>», с одной стороны, и <span class="i200">{{ client["name"] }}</span>, действующей на основании <span class="i200">регламента о поставках</span>, именуемый в дальнейшем «<b>Покупатель</b>», с другой стороны, именуемые в дальнейшем «Стороны», заключили настоящий договор, в дальнейшем «<b>Договор</b>», о нижеследующем:
 
