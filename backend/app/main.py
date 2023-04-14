@@ -34,7 +34,7 @@ def init_app():
     async def shutdown():
         await db.close()
 
-    from app.controller import authentication, users, hardware, orders, status_changes, hardware_orders
+    from app.controller import authentication, users, hardware, orders, status_changes, hardware_orders, contracts
 
     app.include_router(authentication.router)
     app.include_router(users.router)
@@ -42,6 +42,7 @@ def init_app():
     app.include_router(orders.router)
     app.include_router(status_changes.router)
     app.include_router(hardware_orders.router)
+    app.include_router(contracts.router)
 
     return app
 

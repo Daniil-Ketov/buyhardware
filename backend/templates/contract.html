@@ -1,0 +1,218 @@
+{# templates/contract.html #}
+<!doctype html>
+<html>
+<head>
+    <title>Договор поставки оборудования – версия от 2023 года</title>
+    <meta name="description" content="Образец договора поставки оборудования, заключаемого между юридическими лицами" />
+    <meta name="keywords" content="оборудование" />
+    <meta name="robots" content="all" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Cache-control" content="no-cache, must-revalidate" />
+</head>
+<style>
+    html, body { height: 100%; }
+    html, body, form { padding: 0; margin: 0; }
+    body {
+    	font: normal 11px/13px Arial, Helvetica, sans-serif;
+    	color: #333;
+    	text-align: center;
+    	background: #fff;
+    }
+    a { font: normal 11px/13px Arial, Helvetica, sans-serif; text-decoration: none; color: #333; outline: none; }
+    a:hover { color: #333; }
+    a:active { color: #333; }
+
+    h1 { font: normal 20px/22px Arial, Helvetica, sans-serif; color: #333; margin: 0 0 15px 0; padding: 0; }
+    h2 { font: normal 16px/19px Arial, Helvetica, sans-serif; color: #333; margin: 25px 0 5px 0; }
+    h3 { font: bold 13px/16px Arial, Helvetica, sans-serif; color: #333; margin: 15px 0 0 0; }
+    h4 { font: bold 12px/15px Arial, Helvetica, sans-serif; color: #333; margin: 5px 0 0 0; }
+
+    .clear { clear: both; height: 0; overflow: hidden; }
+
+    /* header */
+    .header { background: #333; border-bottom: 1px solid #000; font-size: 10px; line-height: 11px; color: #999; }
+    .header .inner { position: relative; text-align: left; width: 710px; margin: 0 auto; padding: 8px 20px 5px 20px; }
+    .header .inner .logo { width: 88px; margin: -2px 50px 0 0; position: relative; display: block; float: left; font: 32px/30px Impact, Charcoal, sans-serif; color: #fafafa; letter-spacing: 1px; text-shadow: 0 0 2px #000; }
+    .header .inner .url { float: right; color: #eee; margin: 10px 0 0 0; font-size: 11px; line-height: 11px; }
+    /* end */
+
+    /* center */
+    .center { margin: 40px 0; }
+    /* end */
+
+    /* footer */
+    .footer { background: #fafafa; border-top: 1px solid #ddd; font-size: 10px; line-height: 11px; color: #999; }
+    .footer .inner { text-align: left; width: 710px; margin: 0 auto; padding: 15px 20px; }
+    .footer .inner .logo { width: 88px; margin: -2px 20px 0 0; position: relative; display: block; float: left; font: 32px/30px Impact, Charcoal, sans-serif; color: #DBDCDD; letter-spacing: 1px; }
+    .footer .inner .counters { float: right; text-align: right; opacity: 0; filter: alpha(opacity=0); }
+    .footer .inner .counters img { border: 1px solid #aaa !important; border-radius: 2px; }
+    /* end */
+
+    .above {
+        position: relative;
+        top: -100px;
+    }
+
+    p {
+        position: relative;
+    }
+
+    /* table */
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+
+    table, th, tr, td {
+        border: 1px solid black;
+        border-collapse: collapse;
+    }
+      
+    thead th:nth-child(1) {
+        width: 30%;
+    }
+      
+    thead th:nth-child(2) {
+        width: 20%;
+    }
+      
+    thead th:nth-child(3) {
+        width: 15%;
+    }
+      
+    thead th:nth-child(4) {
+        width: 35%;
+    }
+      
+    th,
+    td {
+        padding: 20px;
+    }
+    /* end */
+
+    /* item */
+    .item { text-align: left; width: 710px; padding: 0 20px; margin: 0 auto; font-size: 14px; line-height: 18px; text-shadow: 0 0 1px #ddd; }
+    .item h2 { margin: 0 0 65px 0; padding: 0; text-align: center; text-transform: uppercase; font-size: 28px; line-height: 28px; letter-spacing: -1px; }
+    .item h3 { margin: 45px 0 10px 0; padding: 0; text-align: center; font-size: 16px; text-transform: uppercase; }
+    .item strong { display: block; margin: -60px 50px 60px; text-align: center; font-size: 12px; }
+    .item ol li { margin-bottom: 5px; }
+    .item .city { float: left; margin: 0 0 45px 0; font-style: italic; color: #999; font-size: 12px; }
+    .item .date { float: right; font-style: italic; color: #999; font-size: 12px; }
+    .item .city span { width: 150px; display: inline-block; border-bottom: 1px dotted #999; }
+    .item .date span { display: inline-block; border-bottom: 1px dotted #999; }
+    .item .i200, .item .i100, .item .i80, .item .i50, .item .i20 { width: 250px; display: inline-block; border-bottom: 1px dotted #999; }
+    .item .i100 { width: 150px; }
+    .item .i80 { width: 80px; }
+    .item .i50 { width: 70px; }
+    .item .i20 { width: 40px; }
+    .item .requirements { margin: 30px 0 10px; }
+    .item .requirements .first { float: left; width: 48%; }
+    .item .requirements .second { float: right; width: 48%; }
+    .item .requirements span { display: block; font-size: 11px; border-bottom: 1px dotted #999; }
+    .item .signature { margin-top: 30px; }
+    .item .signature .first { float: left; width: 48%; }
+    .item .signature .second { float: right; width: 48%; }
+    .item .special-comments { margin: 65px 0 0 0; font-size: 11px; line-height: 13px; color: #666; font-style: italic; }
+    .item .special-comments h4 { color: #666; border-bottom: 1px dotted #999; padding: 0 0 5px 0; }
+    .item .np { margin: 65px 0 0 0; font-size: 11px; line-height: 13px; color: #666; }
+    .item .annex { text-align: right; margin: 0 0 30px; }
+    .item .someone { text-align: right; margin: 0 0 30px; font-size: 11px; color: #999; }
+    .item .sign { text-align: right; margin-top: 30px; }
+    /* end */
+</style>
+<body>
+<script type='text/javascript'>window.print();</script>
+
+<div class="center">
+<div class="item"><h2>ДОГОВОР ПОСТАВКИ</h2>
+<strong>оборудования</strong>
+
+<div class="city">г. {{ city }}<span></span></div>
+<div class="date">«<span style="width: 20px;">{{ order_date.day }}</span>» <span style="width: 120px;">{{ months[order_date.month - 1] }}</span> {{ order_date.year }} г.</div>
+<div class="clear"></div>
+<span class="i200">{{ company["name"] }}</span>, действующая на основании <span class="i200">регламента о поставках</span>, именуемый в дальнейшем «<b>Продавец</b>», с одной стороны, и <span class="i200">{{ client["name"] }}</span>, действующей на основании <span class="i200">регламента о поставках</span>, именуемый в дальнейшем «<b>Покупатель</b>», с другой стороны, именуемые в дальнейшем «Стороны», заключили настоящий договор, в дальнейшем «<b>Договор</b>», о нижеследующем:
+
+<h3>1. ПРЕДМЕТ ДОГОВОРА</h3>
+<p>1.1. Продавец обязуется поставить Покупателю и ввести в эксплуатацию в соответствии с «Порядком ввода в эксплуатацию» (Приложение №<span class="i50">  А</span> к настоящему Договору) оборудование, указанное в спецификации (Приложение №<span class="i50">  Б</span> к настоящему Договору). Покупатель обязуется принять и оплатить указанное оборудование, а также обеспечить условия эксплуатации, указанные в Приложении №<span class="i50">  В</span> к настоящему Договору. Также Продавец обязуется осуществлять гарантийное обслуживание данного оборудования в соответствии с приложением №<span class="i50"> Г</span> к настоящему Договору.</p>
+<p>1.2. Приложения №  <span class="i50">А-Г</span> являются неотъемлемой частью настоящего Договора.</p>
+<p>1.3. Стоимость поставляемого оборудования по настоящему Договору составляет <span class="i50">{{ total }}</span> рублей, в том числе НДС <span class="i50">{{ taxes["total"] }}</span> рублей.</p>
+
+
+<h3>2. КАЧЕСТВО И ГАРАНТИЯ ОБОРУДОВАНИЯ</h3>
+<p>2.1. Качество оборудования должно соответствовать требованиям действующего законодательства РФ.</p>
+<p>2.2. Гарантийный срок эксплуатации по производственным дефектам определяется в Спецификации (Приложение №<span class="i50">Г</span>).</p>
+
+
+<h3>3. УСЛОВИЯ И ПОРЯДОК ПОСТАВКИ</h3>
+<p>3.1. Поставка оборудования осуществляется согласно спецификации (Приложение №<span class="i50"> Б</span>) со склада Продавца в г. <span class="i100">{{ warehouse }}</span>.</p>
+<p>3.2. Приемка оборудования производится на складе Покупателя, о чем составляется расходная накладная, подписываемая представителями сторон настоящего Договора.</p>
+
+
+<h3>4. ЦЕНЫ И ПОРЯДОК РАСЧЕТОВ</h3>
+<p>4.1. Цены на оборудование определяются в условных единицах.</p>
+<p>4.2. Оплата по настоящему договору производится в рублях поэтапно. Суммы, подлежащие оплате и сроки, в которые будут производиться оплаты, приведены в следующем графике:</p>
+<p>4.2.1. Первый платеж составляет <span class="i50">{{ first_payment["percents"] }}</span>% от итоговой суммы, что составляет <span class="i50">{{ first_payment["amount"] }}</span> рублей, в том числе НДС <span class="i50">{{ taxes["first_payment"] }}</span> рублей и осуществляется в течение трех банковских дней с даты подписания Договора. </p>
+<p>4.2.2. Второй платеж составляет <span class="i50">{{ second_payment["percents"] }}</span>%, что составляет <span class="i50">{{ second_payment["amount"] }}</span> рублей, в том числе НДС <span class="i50">{{ taxes["second_payment"] }}</span> рублей и осуществляется после прихода оборудования на склад Поставщика.</p>
+<p>4.3. Покупатель обязуется в течение трех банковских дней с момента оплаты предоставить Продавцу копию платежного поручения с отметкой банка об исполнении.</p>
+
+
+<h3>5. ОТВЕТСТВЕННОСТЬ</h3>
+<p>5.1. В случае нарушения сроков поставки оплаченного товара Продавцом, Продавец обязуется уплатить пеню из расчета <span class="i50">{{ penalty["self"]["day"] }}</span>% от суммы не представленного в срок товара за каждый день задержки, но не более <span class="i50">{{ penalty["self"]["max"] }}</span>% от общей суммы оплаченного товара. Пеня начисляется с даты получения Продавцом письменного Уведомления от Покупателя Продавцу, которое является неотъемлемой частью Договора.</p>
+<p>5.2. В случае нарушения сроков оплаты товара Покупателем, Покупатель обязуется уплатить пеню из расчета <span class="i50">{{ penalty["client"]["day"] }}</span>% невыплаченной в срок суммы за каждый день просрочки платежа, но не более <span class="i50"></span>% от общей суммы счета, выставленного на соответствующую партию товара. Пеня начисляется с даты направления Покупателем письменного оформления Уведомления от Продавца Покупателю, которое является неотъемлемой частью Договора.</p>
+<p>5.3. Сторона освобождается от ответственности за неисполнение или ненадлежащее исполнение своих обязательств по настоящему Договору в случае, если оно наступает в результате действия непреодолимой силы (форс-мажор).</p>
+
+
+<h3>6. ПРОЧЕЕ</h3>
+<p>6.1. Споры между сторонами настоящего Договора подлежат рассмотрению и разрешению в Арбитражном суде г. <span class="i100">{{ city }}</span> согласно законодательству РФ.</p>
+<p>6.2. Изменения и дополнения настоящего Договора, могут быть произведены только на основании письменного соглашения сторон, оформляемого отдельным протоколом.</p>
+<p>6.3. Во всем остальном, что прямо не урегулировано условиями настоящего Договора, стороны руководствуются действующим законодательством РФ.</p>
+<p>6.4. Настоящий Договор вступает в силу с даты его подписания и действует до полного выполнения сторонами всех обязательств по Договору.</p>
+<p>6.5. Настоящий Договор составлен в двух экземплярах, имеющих равную юридическую силу, по одному для каждой из сторон.</p>
+
+
+<h3>7. ЮРИДИЧЕСКИЕ АДРЕСА И БАНКОВСКИЕ РЕКВИЗИТЫ СТОРОН</h3>
+<div class="requirements"><div class="first"><b>Продавец {{ company["name"] }}</b><span>Юр. адрес: {{ company["address"] }}</span><span>Почтовый адрес: {{ company["postal_address"] }}</span><span>ИНН: {{ company["tin"] }}</span><span>Банк: {{ company["bank"] }}</span><span>Рас./счёт: {{ company["bank_account"] }}</span><span>Корр./счёт: {{ company["corr_account"] }}</span><span>БИК: {{ company["bik"] }}</span></div><div class="second"><b>Покупатель {{ client["name"] }}</b><span>Юр. адрес: {{ client["address"] }}</span><span>Почтовый адрес: {{ client["postal_address"] }}</span><span>ИНН: {{ client["tin"] }}</span><span>Банк:</span><span>Рас./счёт:</span><span>Корр./счёт:</span><span>БИК:</span></div><div class="clear">
+</div>
+</div>
+
+<h3>8. ПОДПИСИ СТОРОН</h3>
+<div class="signature"><div class="first">Продавец _________________</div><div class="second">Покупатель _________________</div><div class="clear"></div></div></div>
+</div>
+</div>
+<div class="center">
+    <div class="item"><h2>ПРИЛОЖЕНИЕ Б</h2>
+    <strong>Спецификация оборудования</strong>
+    <table>
+        <thead>
+            <tr>
+                {% for key in order_items[0].keys() %}
+                <th scope="col">{{ key }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order_items %}
+            <tr>
+                {% for value in item.values() %}
+                <td>
+                    {{ value }}
+                </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr>
+              <th scope="row" colspan="2">Итоговая сумма: </th>
+              <td>{{ total }}</td>
+            </tr>
+        </tfoot>
+    </table>
+    </div>
+</div>
+</body>
+</html>
+
+        
