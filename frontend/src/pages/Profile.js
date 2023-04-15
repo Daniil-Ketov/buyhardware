@@ -2,9 +2,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 export default function Profile() {
   const [user, setUser] = useState({});
+  let navigate = useNavigate();
 
   useEffect(() => {
     // get token from local storage
@@ -23,6 +25,7 @@ export default function Profile() {
       })
       .catch((error) => {
         console.log(error);
+        toast.error(error.response.data.detail);
       });
   }, []);
 
@@ -46,7 +49,7 @@ export default function Profile() {
 
     // reload page
     setTimeout(() => {
-      window.location.reload();
+      navigate("/");
     }, 1500);
   };
 
@@ -68,11 +71,9 @@ export default function Profile() {
         <div className="flex p-2">
           <div className="w-full text-center">
             <button
-              onClick={(event) => {
-                onClickHandler(event);
-              }}
+              onClick={onClickHandler}
               className="py-3 w-64 text-xl text-black outline-none bg-gray-50 hover:bg-gray-100 active:bg-gray-200">
-              Log out
+              Выйти
             </button>
           </div>
         </div>

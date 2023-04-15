@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, redirect } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   AiOutlineClose,
   AiOutlineInfoCircle,
@@ -7,10 +7,16 @@ import {
   AiOutlineSearch,
 } from "react-icons/ai";
 import { BsBoxSeam, BsPerson } from "react-icons/bs";
-import { TbTruckDelivery } from "react-icons/tb";
+import { TbTruckDelivery, TbLogin } from "react-icons/tb";
 
 export default function Navbar() {
   const [nav, setNav] = useState(false);
+  const [token, setToken] = useState();
+
+  useEffect(() => {
+    const auth = localStorage.getItem("auth_token");
+    setToken(auth);
+  }, [token]);
 
   return (
     <React.Fragment>
@@ -34,12 +40,22 @@ export default function Navbar() {
           />
         </div>
         {/* Profile link */}
-        <Link to="/?profile" onClick={() => {}}>
-          <span className="hidden md:flex items-center p-2 rounded-xl hover:text-red-500">
-            <BsPerson size={20} className="mr-2" />
-            Профиль
-          </span>
-        </Link>
+        {token ? (
+          <Link to="/profile">
+            <span className="hidden md:flex items-center p-2 rounded-xl hover:text-red-500">
+              <BsPerson size={20} className="mr-2" />
+              Профиль
+            </span>
+          </Link>
+        ) : (
+          <Link to="/login">
+            <span className="hidden md:flex items-center p-2 rounded-xl hover:text-red-500">
+              <TbLogin size={20} className="mr-2" />
+              Войти
+            </span>
+          </Link>
+        )}
+
         {/* Order button */}
         <button className=" hidden md:flex items-center p-2 rounded-xl hover:text-red-500">
           <BsBoxSeam size={20} className="mr-2" />
