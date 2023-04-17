@@ -130,6 +130,23 @@ class HardwareCreate(BaseModel):
         return v
 
 
+class HardwareUpdate(BaseModel):
+    name: Optional[str]
+    type: Optional[str]
+    price: Optional[int]
+    short_description: Optional[str]
+    full_description: Optional[str]
+    image: Optional[str]
+
+    @validator("price")
+    def price_validation(cls, v):
+        logger.debug(f"price in 2 validator: {v}")
+        if v and v < 0:
+            raise HTTPException(status_code=400, detail={
+                                "status": "Bad request", "message": "Цена не может быть отрицательной"})
+        return v
+
+
 class HardwareTypeCreate(BaseModel):
     name: str
     desc: str

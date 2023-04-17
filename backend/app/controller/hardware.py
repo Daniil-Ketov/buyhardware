@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, Query, Path
 from uuid import uuid4
-from app.schema import HardwareCreate, ResponseSchema, HardwareTypeCreate
+from app.schema import HardwareCreate, HardwareUpdate, ResponseSchema, HardwareTypeCreate
 from app.repository.auth_repo import JWTBearer
 from app.repository.hardware import HardwareRepository
 from app.repository.hardware_type import HardwareTypeRepository
@@ -22,9 +22,9 @@ async def create_hardware(
 async def update_hardware(
         hardware_id: str = Path(..., alias="id"),
         *,
-        update_form: HardwareCreate
+        update_form: HardwareUpdate
 ):
-    await HardwareRepository.update(hardware_id, update_form)
+    await HardwareRepository.update(hardware_id, **update_form.dict())
     return ResponseSchema(detail="Данные успешно обновлены")
 
 
