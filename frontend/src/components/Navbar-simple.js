@@ -1,27 +1,17 @@
 import React, { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
 import {
   AiOutlineClose,
   AiOutlineInfoCircle,
   AiOutlineMenu,
-  AiOutlineSearch,
 } from "react-icons/ai";
-import { CiLogin } from "react-icons/ci";
-import { BsBoxSeam, BsPerson } from "react-icons/bs";
 import { TbTruckDelivery } from "react-icons/tb";
+import { useNavigate } from "react-router-dom";
 
 export default function Navbar() {
   const [nav, setNav] = useState(false);
-  const [token, setToken] = useState();
-
-  useEffect(() => {
-    const auth = localStorage.getItem("auth_token");
-    setToken(auth);
-  }, [token]);
   var navigate = useNavigate();
-
   return (
-    <div className="max-w-[1640px] mx-auto flex justify-between items-center p-4">
+    <div className="max-w-[1640px] bg-white mx-auto flex justify-between items-center p-4">
       {/* Left side */}
       <div className="flex items-center">
         <div onClick={() => setNav(!nav)} className="cursor-pointer">
@@ -35,41 +25,6 @@ export default function Navbar() {
           buy<span className="font-bold">hardware</span>
         </h1>
       </div>
-      {/* Search input */}
-      {/* <div className="bg-gray-200 rounded-full flex items-center px-2 w-[100px] sm:w-[200px] lg:w-[300px]">
-        <AiOutlineSearch size={25} />
-        <input
-          className="bg-transparent p-2 focus:outline-none w-full"
-          type="text"
-          placeholder="Поиск"
-        />
-      </div> */}
-      <span className="flex flex-row">
-        {/* Profile link */}
-        {token ? (
-          <Link to="/profile">
-            <span className="hidden md:flex items-center p-2 rounded-xl hover:text-red-500">
-              <BsPerson size={20} className="mr-2" />
-              Профиль
-            </span>
-          </Link>
-        ) : (
-          <Link to="/login">
-            <span className="hidden md:flex mr-8 items-center p-2 rounded-xl hover:text-red-500">
-              <CiLogin size={20} className="mr-2" />
-              Войти
-            </span>
-          </Link>
-        )}
-
-        {/* Order button */}
-        <Link to="/cart">
-          <span className="hidden md:flex mr-24 items-center p-2 rounded-xl hover:text-red-500">
-            <BsBoxSeam size={20} className="mr-2" />
-            Заказ
-          </span>
-        </Link>
-      </span>
       {/* Mobile menu */}
       {/* Overlay */}
       {nav ? (

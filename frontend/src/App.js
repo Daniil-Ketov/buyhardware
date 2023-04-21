@@ -6,6 +6,7 @@ import Register from "./form/Register";
 import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import { Route, Routes } from "react-router-dom";
+import Cart from "./pages/Cart";
 
 function App() {
   const [token, setToken] = useState();
@@ -22,6 +23,7 @@ function App() {
       <Route path="/forgot" element={<Forgot />} />
       <Route path="/register" element={<Register />} />
       <Route path="/profile" element={<Profile />} />
+      <Route path="/cart" element={<Cart />} />
     </Routes>
   );
 }

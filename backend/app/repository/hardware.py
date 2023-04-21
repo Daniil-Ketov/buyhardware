@@ -25,7 +25,7 @@ class HardwareRepository(PaginationMixin, BaseRepo):
             hardware_form['image'] = "data:image/png;base64," + \
                 default.decode('utf-8')
 
-        _hardware = Hardware(hardware_form)
+        _hardware = Hardware(**hardware_form)
         db.add(_hardware)
         await commit_rollback()
         return _hardware
