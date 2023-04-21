@@ -3,6 +3,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import Navbar from "../components/Navbar-simple";
 
 export default function Profile() {
   const [user, setUser] = useState({});
@@ -54,27 +56,50 @@ export default function Profile() {
   };
 
   return (
-    <div className="bg-gray-200 font-sans h-screen w-full flex flex-row justify-center items-center">
-      <div className="card w-96 mx-auto bg-white shadow-xl hover:shadow">
-        <div className="text-center mt-2 text-3xl font-medium">{user.name}</div>
-        <div className="text-center mt-2 font-light text-sm">
-          @{user.username}
+    <div className=" h-screen w-full">
+      <Navbar />
+      <div className="grid grid-cols-4 mt-4 max-w-[1240px] m-auto min-h-[600px] justify-between">
+        <div className="col-span-1 mr-4 mt-8 rounded-3xl bg-gray-100">
+          <Link
+            className="rounded-full mt-12 bg-gray-50 border-gray-500 border-[2px] flex p-4 m-4 hover:bg-gray-300 hover:cursor-pointer text-center text-xl font-semibold"
+            to={"/profile"}>
+            Профиль
+          </Link>
+          <Link
+            className="rounded-full bg-gray-50 flex p-4 m-4 hover:bg-gray-300 hover:cursor-pointertext-center text-xl font-semibold"
+            to={"/orders"}>
+            Заказы
+          </Link>
         </div>
-        <div className="text-center font-normal text-lg">{user.email}</div>
-        <hr className="mt-8"></hr>
-        <div className="flex p-4">
-          <div className="w-1/2 text-center">
-            <span className="font-bold">{user.phone_number}</span>
-          </div>
-        </div>
-        <hr className="mt-3"></hr>
-        <div className="flex p-2">
-          <div className="w-full text-center">
-            <button
-              onClick={onClickHandler}
-              className="py-3 w-64 text-xl text-black outline-none bg-gray-50 hover:bg-gray-100 active:bg-gray-200">
-              Выйти
-            </button>
+        <div className="col-span-3 mr-4 mt-8 bg-gray-50  rounded-3xl">
+          <div className="font-sans">
+            <div className="m-auto mt-36 rounded-3xl card w-96 mx-auto my-auto bg-white shadow-xl hover:shadow">
+              <div className="text-center mt-2 text-3xl font-medium">
+                {user.name}
+              </div>
+              <div className="text-center mt-2 font-light text-sm">
+                @{user.username}
+              </div>
+              <div className="text-center font-normal text-lg">
+                {user.email}
+              </div>
+              <hr className="mt-8"></hr>
+              <div className="flex p-4">
+                <div className="w-1/2 text-center">
+                  <span className="font-bold">{user.phone_number}</span>
+                </div>
+              </div>
+              <hr className="mt-3"></hr>
+              <div className="flex p-2">
+                <div className="w-full text-center">
+                  <button
+                    onClick={onClickHandler}
+                    className="rounded-3xl py-3 w-64 text-xl text-black outline-none bg-gray-50 hover:bg-gray-100 active:bg-gray-200">
+                    Выйти
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </div>

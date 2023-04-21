@@ -7,6 +7,7 @@ import Profile from "./pages/Profile";
 import Home from "./pages/Home";
 import { Route, Routes } from "react-router-dom";
 import Cart from "./pages/Cart";
+import Orders from "./pages/Orders";
 
 function App() {
   const [token, setToken] = useState();
@@ -24,6 +25,7 @@ function App() {
       <Route path="/register" element={<Register />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/cart" element={<Cart />} />
+      <Route path="/orders" element={<Orders />} />
     </Routes>
   );
 }

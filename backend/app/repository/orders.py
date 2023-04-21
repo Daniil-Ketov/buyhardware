@@ -11,7 +11,7 @@ class OrdersRepository(BaseRepo):
     @staticmethod
     async def find_by_user_id(user_id: str):
         query = select(Orders).where(Orders.user_id == user_id)
-        return (await db.execute(query)).mappings().all()
+        return (await db.execute(query)).scalars().all()
 
     @staticmethod
     async def delete_by_user_id(user_id: str):
