@@ -1,0 +1,32 @@
+version: "3.8"
+services:
+  backend:
+    build: ./backend
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; alembic upgrade head && uvicorn app.main:app --host 0.0.0.0 --reload'
+    volumes:
+      - .:/app
+    ports:
+      - 8888:8888
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://hwshopuser:pgpwd4hwshop@db:5432/buyhardware
+    depends_on:
+      - db
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+  db:
+    image: postgres:15.2-bullseye
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5435:5435
+    expose:
+      - 5435:5435
+    environment:
+      POSTGRES_DB: "buyhardware"
+      POSTGRES_USER: "hwshopuser"
+      POSTGRES_PASSWORD: "pgpwd4hwshop"
+
+volumes:
+  postgres_data:

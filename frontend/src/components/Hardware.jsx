@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
+import { BsFilter } from "react-icons/bs";
 import { Link } from "react-router-dom";
 import { useCart } from "react-use-cart";
 
@@ -258,21 +259,9 @@ function Hardware() {
           Компьютерное оборудование
         </h1>
         {/* Filter row */}
-        <div className="flex flex-col mt-4 lg:flex-row justify-between lg:h-[50px]">
-          {/* Filter price */}
-          {/* <div>
-          <p className="font-bold text-gray-700">Цена</p>
-          <div className="flex justify-between max-w-[240px]">
-            <button className="border-2 border-red-500 text-red-500 rounded-xl p-1 m-1 hover:bg-red-500 hover:text-white">
-              Подороже
-            </button>
-            <button className="border-2 border-red-500 text-red-500 rounded-xl p-1 m-1 hover:bg-red-500 hover:text-white">
-              Подешевле
-            </button>
-          </div>
-        </div> */}
+        <div className="flex flex-col mt-10 lg:flex-row justify-center mx-auto lg:h-[50px]">
           {/* Search */}
-          <div className="bg-gray-200 rounded-full flex items-center px-2 w-[100px] sm:w-[200px] lg:w-[300px]">
+          <div className="bg-gray-200 rounded-full flex items-center mr-12 px-2 w-[100px] sm:w-[200px] lg:w-[300px]">
             <AiOutlineSearch size={25} />
             <input
               className="bg-transparent p-2 focus:outline-none w-full"
@@ -283,11 +272,20 @@ function Hardware() {
               }}
             />
           </div>
-
-          {/* Filter type */}
-          <div className="flex flex-row">
-            <p className="font-bold text-gray-700 self-center mr-2">Тип</p>
-            <div className="flex justify-between flex-wrap">
+          {/* Filter */}
+          <div className="my-auto ml-12">
+            <div className="flex flex-row items-center font-bold text-gray-700 self-center mr-2 hover:text-red-500 hover:cursor-pointer">
+              <BsFilter className="m-2" />
+              <span>Фильтр</span>
+            </div>
+          </div>
+          {/* Filter type
+          <div className="dropdown flex flex-row">
+            <div className="flex flex-row items-center font-bold text-gray-700 self-center mr-2">
+              <BsFilter className="m-2" />
+              <span>Тип</span>
+            </div>
+            <div className="flex dropdown-content menu justify-between flex-wrap">
               <button className="border-2 border-red-500 text-red-500 rounded-xl p-1 m-1 hover:bg-red-500 hover:text-white">
                 Все
               </button>
@@ -302,7 +300,7 @@ function Hardware() {
             </div>
           </div>
 
-          {/* sort column */}
+          Sort column
           <div className="dropdown dropdown-bottom">
             <label tabIndex={0} className="btn m-1">
               Сортировка
@@ -319,7 +317,7 @@ function Hardware() {
                 </button>
               </li>
             </ul>
-          </div>
+          </div> */}
         </div>
         {/* Display hardware */}
         <div className="grid grid-cols-2 lg:grid-cols-3 gap-6 pt-4 mt-12">

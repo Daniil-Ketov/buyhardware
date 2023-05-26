@@ -1,9 +1,17 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 from sqlmodel import SQLModel
+from pydantic import BaseSettings, Field
 
 
-DB_CONFIG = f"postgresql+asyncpg://buyhardware:AI$Yay21ns_@localhost:5433/buyhardware"
+class Settings(BaseSettings):
+    db_url: str = Field(..., env='DATABASE_URL')
+
+
+settings = Settings()
+
+
+DB_CONFIG = settings.db_url
 
 SECRET_KEY = "8uYhaArdVVAr3"
 ALGORITHM = "HS256"

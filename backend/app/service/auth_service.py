@@ -84,12 +84,13 @@ class AuthService:
         _username = await UsersRepository.find_by_username(register.username)
         if _username:
             raise HTTPException(
-                status_code=400, detail="Username already exist")
+                status_code=400, detail="Логин уже существует в системе")
 
         # Проверка на существование пользователя с таким же email в базе данных
         _email = await UsersRepository.find_by_email(register.email)
         if _email:
-            raise HTTPException(status_code=400, detail="Email already exist")
+            raise HTTPException(
+                status_code=400, detail="Email уже существует в системе")
 
         else:
             # Добавление в базу данных
@@ -124,12 +125,13 @@ class AuthService:
         _username = await UsersRepository.find_by_username(register.username)
         if _username:
             raise HTTPException(
-                status_code=400, detail="Username already exist")
+                status_code=400, detail="Логин уже существует в системе")
 
         # Проверка на существование пользователя с таким же email в базе данных
         _email = await UsersRepository.find_by_email(register.email)
         if _email:
-            raise HTTPException(status_code=400, detail="Email already exist")
+            raise HTTPException(
+                status_code=400, detail="Email уже существует в системе")
 
         else:
             # Добавление в базу данных
@@ -143,15 +145,17 @@ class AuthService:
         _username = await UsersRepository.find_by_username(login.username)
         if _username is not None:
             if not pwd_context.verify(login.password, _username.password):
-                raise HTTPException(status_code=400, detail="Invalid password")
+                raise HTTPException(status_code=400, detail="Неверный пароль")
             return JWTRepo(data={"username": _username.username}).generate_token()
-        raise HTTPException(status_code=400, detail="Username not found")
+        raise HTTPException(
+            status_code=400, detail="Пользователя с таким логином не существует")
 
     @staticmethod
     async def forgot_password_service(forgot_password: ForgotPasswordSchema):
         _email = await UsersRepository.find_by_email(forgot_password.email)
         if _email is None:
-            raise HTTPException(status_code=400, detail="Email not found")
+            raise HTTPException(
+                status_code=400, detail="Данный email не найден")
         await UsersRepository.update_password(forgot_password.email,
                                               pwd_context.hash(forgot_password.new_password))
 

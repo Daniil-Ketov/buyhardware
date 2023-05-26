@@ -36,7 +36,7 @@ export default function Forgot() {
         }, 1000);
       })
       .catch((error) => {
-        toast.success(error.response.data.detail);
+        toast.error(error.response.data.detail);
       });
   };
 

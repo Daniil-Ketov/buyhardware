@@ -27,7 +27,15 @@ export default function Profile() {
       })
       .catch((error) => {
         console.log(error);
-        toast.error(error.response.data.detail);
+        if (error.response.data.detail === "Токен истёк") {
+          // remove token form local storage
+          localStorage.removeItem("auth_token");
+          localStorage.removeItem("auth_token_type");
+          navigate("/");
+          toast.warning("Токен истёк. Войдите снова.");
+        } else {
+          toast.error(error.response.data.detail);
+        }
       });
   }, []);
 

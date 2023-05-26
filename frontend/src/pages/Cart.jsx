@@ -62,7 +62,12 @@ function Cart() {
         // add error notif
 
         console.log(error);
-        toast.error(error.response.data.detail);
+        toast.error(error.response.data.detail.message);
+        if (
+          error.response.data.detail === "Invalid authentication credentials"
+        ) {
+          toast.warning("Пожалуйста, войдите в аккаунт");
+        }
       });
   };
 
