@@ -28,6 +28,6 @@ services:
     ports:
       - ${POSTGRES_PORT}:${POSTGRES_PORT}
     expose:
-      - ${POSTGRES_PORT}:${POSTGRES_PORT}
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
 volumes:
   postgres_data:
