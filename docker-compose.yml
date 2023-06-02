@@ -26,8 +26,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
-      - :${POSTGRES_PORT}:${POSTGRES_PORT}"
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
     expose:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+      - ${POSTGRES_PORT}:${POSTGRES_PORT}
 volumes:
   postgres_data:
