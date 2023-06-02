@@ -62,7 +62,7 @@ jobs:
   test:
     name: Run tests and linters
     needs:
-      - build
+      - build_backend
     runs-on: ubuntu-latest
 
     steps:
