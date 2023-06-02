@@ -6,6 +6,7 @@ from pydantic import BaseSettings, Field
 
 class Settings(BaseSettings):
     db_url: str = Field(..., env='DATABASE_URL')
+    api_key: str = Field(..., env='API_KEY')
 
 
 settings = Settings()
@@ -13,7 +14,7 @@ settings = Settings()
 
 DB_CONFIG = settings.db_url
 
-SECRET_KEY = "8uYhaArdVVAr3"
+SECRET_KEY = settings.api_key
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
