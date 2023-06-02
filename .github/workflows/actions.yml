@@ -83,7 +83,7 @@ jobs:
           file_name: .env
           fail_on_empty: false
 
-      - run: docker-compose run server pytest test_main.py
+      - run: docker-compose run backend pytest test_main.py
 
   deploy:
     name: Deploy to Server
