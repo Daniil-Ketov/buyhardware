@@ -10,7 +10,7 @@ services:
     ports:
       - 8888:8000
     environment:
-      - DATABASE_URL=postgresql+asyncpg://POSTGRES_USER:POSTGRES_PASSWORD@db:POSTGRES_PORT/POSTGRES_DB
+      - DATABASE_URL="postgresql+asyncpg://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:${POSTGRES_PORT}/${POSTGRES_DB}"
     depends_on:
       - db
   frontend:
@@ -26,8 +26,8 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
-      - POSTGRES_PORT:POSTGRES_PORT
+      - :${POSTGRES_PORT}:${POSTGRES_PORT}"
     expose:
-      - POSTGRES_PORT:POSTGRES_PORT
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
 volumes:
   postgres_data:
